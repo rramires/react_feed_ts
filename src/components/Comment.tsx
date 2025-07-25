@@ -4,7 +4,13 @@ import thumbsUpIcon from '../assets/icons/thumbs-up.svg';
 import { Avatar } from './Avatar'
 import { useState } from 'react';
 
-export function Comment({ id, content, onDelete }) {
+interface CommentProps {
+    id: number
+    content: string
+    onDelete: (id: number) => void
+}
+
+export function Comment({ id, content, onDelete }: CommentProps) {
 
     const [clapping, setClapping] = useState(0)
 

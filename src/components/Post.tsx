@@ -3,10 +3,27 @@ import { Comment } from './Comment'
 import { Avatar } from './Avatar'
 
 import { format, formatDistanceToNow } from 'date-fns'
-import ptBR from 'date-fns/locale/pt-BR';
-import { useState, useRef } from 'react';
+import { ptBR } from 'date-fns/locale/pt-BR';
+import { useState, useRef, type FormEvent } from 'react';
 
-export function Post({ author, publishedAt, content }) {
+interface Author {
+    name: string
+    role: string
+    avatarUrl: string
+}
+
+interface Content {
+    type: 'paragraph' | 'link'
+    content: string
+}
+
+interface PostProps {
+    author: Author
+    publishedAt: Date
+    content: Content[]
+}
+
+export function Post({ author, publishedAt, content }: PostProps) {
 
     const [comments, setComments] = useState([
         { id: 1, msg: 'Muito bom Dev, parabéns!!!' }
@@ -14,24 +31,24 @@ export function Post({ author, publishedAt, content }) {
 
     const [commentText, setCommentText] = useState('')
 
-    const btnPublish = useRef(null)
+    const btnPublish = useRef<HTMLButtonElement>(null)
 
-    const isCommentEmpty = commentText.length < 3;
+    const isCommentEmpty = commentText.length < 3
 
-    /* function handleInvalidNewComment(event){
+    /* function handleInvalidNewComment(event: InvalidEvent){
         event.target.setCustomValidity('Esse campo é obrigatório!')
     } */
 
-    function handleNewComment(event) {
+    function handleNewComment(event: FormEvent) {
         event.preventDefault()
 
         setComments([...comments, { id: comments.length + 1, msg: commentText } ])
         setCommentText('')
         // remove focus
-        btnPublish.current.blur()
+        btnPublish.current?.blur()
     }
 
-    function deleteComment(id){
+    function deleteComment(id: number){
         //console.log('deleteComment:', id)
         const diffComments = comments.filter(comment => {
             return comment.id !== id;
